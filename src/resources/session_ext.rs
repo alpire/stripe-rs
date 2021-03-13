@@ -1,5 +1,5 @@
 use crate::config::{Client, Response};
-use crate::ids::{CustomerId, SessionId};
+use crate::ids::{CustomerId, SessionId, BillingPortalConfigurationId};
 use crate::params::Timestamp;
 use serde_derive::{Deserialize, Serialize};
 
@@ -10,6 +10,10 @@ use serde_derive::{Deserialize, Serialize};
 pub struct CreateSession {
     /// The ID of an existing customer.
     pub customer: CustomerId,
+
+    /// The configuration to use for this session, describing its functionality and features. If
+    /// not specified, the session uses the default configuration.
+    pub configuration: Option<BillingPortalConfigurationId>,
 
     /// The URL to which Stripe should send customers when they click on the link to return to your website. This field is required if a default return URL has not been configured for the portal.
     pub return_url: Option<String>,
@@ -46,7 +50,7 @@ pub struct Session {
 
 impl CreateSession {
     pub fn new(customer: CustomerId) -> Self {
-        CreateSession { customer, return_url: None }
+        CreateSession { customer, configuration: None, return_url: None }
     }
 }
 
